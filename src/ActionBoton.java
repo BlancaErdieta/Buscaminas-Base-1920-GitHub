@@ -1,5 +1,9 @@
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JLabel;
+
 
 /**
  * Clase que implementa el listener de los botones del Buscaminas.
@@ -10,11 +14,17 @@ import java.awt.event.ActionListener;
  **
  */
 public class ActionBoton implements ActionListener{
-
+	int i;
+	int j;
+	ControlJuego juego;
+	VentanaPrincipal ventana;
 	
 
-	public ActionBoton() {
-		//TODO
+	public ActionBoton(int i ,int j, ControlJuego juego, VentanaPrincipal ventana) {
+		this.i=i;
+		this.j=j;
+		this.juego= juego;
+		this.ventana = ventana;
 	}
 	
 	/**
@@ -22,7 +32,22 @@ public class ActionBoton implements ActionListener{
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//TODO
+		
+		
+		if (juego.abrirCasilla(i, j) == true) {
+			ventana.mostrarNumMinasAlrededor(i, j);
+
+		}else if(juego.abrirCasilla(i, j) != true)  {
+			
+			ventana.mostrarFinJuego(true);
+			
+			
+		}
+		ventana.actualizarPuntuacion();
+		if (juego.esFinJuego()==true) {
+			ventana.mostrarFinJuego(false);
+		}
+		
 	}
 
 }

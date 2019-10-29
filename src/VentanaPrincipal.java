@@ -123,11 +123,13 @@ public class VentanaPrincipal {
 		//Botones
 		botonesJuego = new JButton[10][10];
 		for (int i = 0; i < botonesJuego.length; i++) {
+			
 			for (int j = 0; j < botonesJuego[i].length; j++) {
 				botonesJuego[i][j] = new JButton("-");
 				panelesJuego[i][j].add(botonesJuego[i][j]);
 			}
 		}
+	
 		
 		//BotónEmpezar:
 		panelEmpezar.add(botonEmpezar);
@@ -139,7 +141,40 @@ public class VentanaPrincipal {
 	 * Método que inicializa todos los lísteners que necesita inicialmente el programa
 	 */
 	public void inicializarListeners(){
-		//TODO
+		for (int i = 0; i < botonesJuego.length; i++) {
+
+			for (int j = 0; j < botonesJuego.length; j++) {
+				botonesJuego[i][j].addActionListener(new ActionBoton(i,j,juego,this));
+
+			}
+
+		}
+
+		
+		botonEmpezar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				juego.inicializarPartida();
+				
+				for (int i = 0; i < botonesJuego.length; i++) {
+					
+					for (int j = 0; j < botonesJuego[i].length; j++) {
+						//elimino el boton
+						panelesJuego[i][j].removeAll();
+						
+						botonesJuego[i][j] = new JButton("-");
+						panelesJuego[i][j].add(botonesJuego[i][j]);
+					}
+				}
+				
+				inicializarListeners();
+				
+				refrescarPantalla();
+				
+				
+			}
+		});
 	}
 	
 	
@@ -156,7 +191,17 @@ public class VentanaPrincipal {
 	 * @param j: posición horizontal de la celda.
 	 */
 	public void mostrarNumMinasAlrededor(int i , int j) {
-		//TODO
+
+			botonesJuego[i][j].setVisible(false);
+			panelesJuego[i][j].remove(botonesJuego[i][j]);
+			JLabel label = new JLabel(Integer.toString(juego.getMinasAlrededor(i, j)));
+			label.setLayout(new GridLayout(1, 1));
+			label.setForeground(correspondenciaColores[juego.getMinasAlrededor(i, j)]);
+			label.setHorizontalAlignment(JLabel.CENTER);
+			panelesJuego[i][j].add(label);
+			refrescarPantalla();
+			
+
 	}
 	
 	
@@ -166,14 +211,31 @@ public class VentanaPrincipal {
 	 * @post : Todos los botones se desactivan excepto el de volver a iniciar el juego.
 	 */
 	public void mostrarFinJuego(boolean porExplosion) {
-		//TODO
+		if (porExplosion==true) {
+			JOptionPane.showMessageDialog(ventana, "Fin del juego. \n Has perdido");
+		}else {
+			JOptionPane.showMessageDialog(ventana, "Fin del juego. \n Has ganado!!");
+		}
+		
+		for (int i = 0; i < botonesJuego.length; i++) {
+			for (int j = 0; j < botonesJuego.length; j++) {
+				botonesJuego[i][j].setEnabled(false);
+			}
+		}
+	
+		
+		
+		
+		
 	}
 
 	/**
 	 * Método que muestra la puntuación por pantalla.
 	 */
 	public void actualizarPuntuacion() {
-		//TODO
+		pantallaPuntuacion.setText(Integer.toString(juego.getPuntuacion()));
+
+		
 	}
 	
 	/**
